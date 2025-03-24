@@ -6,22 +6,6 @@ import plotly.express as px
 st.set_page_config(page_title="Meta ADS", layout="wide")
 st.title("📊 Dashboard De Tráfego Pago")
 
-# Layout do cabeçalho
-col1, col2 = st.columns([0.7, 0.3])
-with col1:
-    st.text("👋 Olá, seja bem-vindo!")
-with col2:
-    st.markdown(
-        """
-        <div style='text-align: right;'>
-            <a href='https://www.linkedin.com/in/erique-ferreira-6451382a2' target='_blank'>
-                <img src='https://cdn-icons-png.flaticon.com/512/174/174857.png' width='25'> LinkedIn
-            </a>  
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
 # Função para carregar os dados
 @st.cache_data
 def load_data():
