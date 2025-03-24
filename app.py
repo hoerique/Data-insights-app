@@ -26,16 +26,14 @@ with col2:
 @st.cache_data
 def load_data():
     try:
-        data = pd.read_excel("C:\\Users\\Eriqu\\OneDrive\\Documentos\\Meus-teste\\campanhas_Meta_ads.xlsx", decimal=",")
+        url = "https://raw.githubusercontent.com/hoerique/Data-insights-app/main/campanhas_Meta_ads.xlsx"
+        data = pd.read_excel(url, decimal=",")
         data["data_inicio"] = pd.to_datetime(data["data_inicio"], errors="coerce")
         data.rename(columns={"impressões": "impressoes"}, inplace=True)
         return data
     except Exception as e:
         st.error(f"Erro ao carregar os dados: {e}")
         return pd.DataFrame()
-
-# Carregar os dados
-data = load_data()
 
 if not data.empty:
     # Barra lateral - Filtros
