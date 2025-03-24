@@ -11,8 +11,15 @@ st.title("📊 Dashboard De Tráfego Pago")
 def load_data():
     url = "https://raw.githubusercontent.com/hoerique/Data-insights-app/main/campanhas_Meta_ads.csv"
     try:
-        data = pd.read_csv(url, decimal=",", parse_dates=["data_inicio"], dayfirst=True)
+        data = pd.read_csv(url, decimal=",")
+        data["data_inicio"] = pd.to_datetime(data["data_inicio"], errors="coerce")
         data.rename(columns={"impressões": "impressoes"}, inplace=True)
+
+        # Convertendo colunas numéricas para evitar erro de tipo
+        colunas_numericas = ["impressoes", "cliques", "investimento", "CPC", "CPM"]
+        for coluna in colunas_numericas:
+            data[coluna] = pd.to_numeric(data[coluna], errors="coerce").fillna(0)
+
         return data
     except Exception as e:
         st.error(f"Erro ao carregar os dados: {e}")
@@ -81,4 +88,3 @@ if not data.empty:
         fig = px.bar(df_melted, x="Valor", y="nome_campanha", color="Métrica", orientation="h", barmode="group")
         fig.update_layout(title="💡 Criativos com Maior Investimento e Impressões", xaxis_title="Valor", yaxis_title="Campanha")
         st.plotly_chart(fig, use_container_width=True)
-
