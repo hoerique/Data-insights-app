@@ -6,24 +6,22 @@ import plotly.express as px
 st.set_page_config(page_title="Meta ADS", layout="wide")
 st.title("📊 Dashboard De Tráfego Pago")
 
-# Função para carregar os dados
+# Função para carregar os dados do GitHub
 @st.cache_data
 def load_data():
+    url = "https://raw.githubusercontent.com/hoerique/Data-insights-app/main/campanhas_Meta_ads.csv"
     try:
-        url = "https://raw.githubusercontent.com/hoerique/Data-insights-app/main/campanhas_Meta_ads.xlsx"
-        data = pd.read_excel(url, decimal=",")
-        data["data_inicio"] = pd.to_datetime(data["data_inicio"], errors="coerce")
+        data = pd.read_csv(url, decimal=",", parse_dates=["data_inicio"], dayfirst=True)
         data.rename(columns={"impressões": "impressoes"}, inplace=True)
         return data
     except Exception as e:
         st.error(f"Erro ao carregar os dados: {e}")
-        return None  # Retorna None para evitar erros ao acessar 'data'
+        return pd.DataFrame()
 
 # Carregar os dados
 data = load_data()
 
-# Verificar se os dados foram carregados corretamente
-if data is not None and not data.empty:
+if not data.empty:
     # Barra lateral - Filtros
     st.sidebar.header("🎯 Filtros")
     
@@ -61,13 +59,13 @@ if data is not None and not data.empty:
     col1, col2, col3 = st.columns(3)
     col4, col5, col6 = st.columns(3)
 
-    col1.metric("📢 Impressões", f"{metricas['Impressões']:,}".replace(",", "."))
-    col2.metric("🖱️ Cliques", f"{metricas['Cliques']:,}".replace(",", "."))
+    col1.metric("📢 Impressões", f"{metricas['Impressões']:,}")
+    col2.metric("🖱️ Cliques", f"{metricas['Cliques']:,}")
     col3.metric("📊 CTR", f"{metricas['CTR (%)']:.2f}%")
-    col4.metric("💰 Investimento", f"R$ {metricas['Investimento Total']:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
-    col5.metric("⚡ CPC", f"R$ {metricas['CPC Médio']:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
-    col6.metric("📈 CPM", f"R$ {metricas['CPM Médio']:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
-
+    col4.metric("💰 Investimento", f"R$ {metricas['Investimento Total']:,.2f}")
+    col5.metric("⚡ CPC", f"R$ {metricas['CPC Médio']:,.2f}")
+    col6.metric("📈 CPM", f"R$ {metricas['CPM Médio']:,.2f}")
+    
     # Exibir tabela de dados filtrados
     st.subheader("📋 Dados das Campanhas")
     st.dataframe(dados_filtrados)
@@ -83,8 +81,4 @@ if data is not None and not data.empty:
         fig = px.bar(df_melted, x="Valor", y="nome_campanha", color="Métrica", orientation="h", barmode="group")
         fig.update_layout(title="💡 Criativos com Maior Investimento e Impressões", xaxis_title="Valor", yaxis_title="Campanha")
         st.plotly_chart(fig, use_container_width=True)
-    
-else:
-    st.warning("⚠️ Nenhum dado foi carregado. Verifique a fonte de dados e tente novamente.")
-
 
