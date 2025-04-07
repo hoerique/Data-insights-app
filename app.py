@@ -110,7 +110,7 @@ fig_barras_horizontais = px.bar(
     color="Métrica",
     orientation="h",
     barmode="group",
-    title="💡 Investimento e Impressões por Campanha (Horizontal)",
+    title="💡 Investimento e Impressões",
     labels={"nome_campanha": "Campanha", "Valor": "Valor"}
 )
 
