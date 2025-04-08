@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as px
 
 st.set_page_config(page_title="Olá Mundo", layout="wide")
-st.title("Meu nome é Erique Ferreira Dias")
+st.title("Dashboard De Trafego Pago")
 
 # Carregando os dados
 df = pd.read_csv(
@@ -54,7 +54,7 @@ cpc_medio = df_filtrado["CPC"].mean() if not df_filtrado.empty else 0
 cpm_medio = df_filtrado["CPM"].mean() if not df_filtrado.empty else 0
 
 # Exibindo as métricas
-st.subheader("📊 Métricas de Campanhas Publicitárias")
+st.subheader("Meta Ads")
 
 col1, col2, col3 = st.columns(3)
 with col1:
